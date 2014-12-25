@@ -16,10 +16,10 @@ https://github.com/npedotnet/TGAReader/blob/master/LICENSE
 ### 1. Add the source code to your project.
 
 **Java**
-- Add TGAReader.java to your project, and modify package statement.
+- Add src/java/TGAReader.java to your project, and modify package statement.
 
 **C**
-- Add tga_reader.c and tga_reader.h to your project.
+- Add src/c/tga_reader.{c,h} to your project.
 
 ### 2. Create a TGA binary data buffer.
 
@@ -140,7 +140,8 @@ Sample code to create java.awt.image.BufferedImage.
 ```
 
 For more details, please refer to the sample project.
-TODO: path
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGASwingBufferedImage
 
 #### 4.3. Android OpenGL Application
 Sample code to create Android OpenGL texture.
@@ -189,7 +190,8 @@ Sample code to create Android OpenGL texture.
 ```
 
 For more details, please refer to the sample project.
-TODO: path
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAGLViewer_Android
 
 #### 4.4. Android Application
 Sample code to create android.graphics.Bitmap.
@@ -217,7 +219,8 @@ Sample code to create android.graphics.Bitmap.
     }
 ```
 For more details, please refer to the sample project.
-TODO: path
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGABitmapViewer_Android
 
 #### 4.5. iOS OpenGL Application
 Sample code to create iOS OpenGL texture.
@@ -264,7 +267,8 @@ Sample code to create iOS OpenGL texture.
 ```
 
 For more details, please refer to the sample project.
-TODO: path
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAGLViewer_iOS
 
 #### 4.6. iOS Application
 Sample code to create iOS UIImage.
@@ -289,26 +293,30 @@ Sample code to create iOS UIImage.
 	        
 	        tgaFree(buffer);
 	        
+	        CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+	        CGBitmapInfo bitmapInfo = (CGBitmapInfo)kCGImageAlphaLast;
 	        CGDataProviderRef providerRef = CGDataProviderCreateWithData(NULL, pixels, 4*width*height, releaseDataCallback);
 	        
-	        CGImageRef imageRef = CGImageCreate(width, height, 8, 32, 4*width, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaLast, providerRef, NULL, 0, kCGRenderingIntentDefault);
+	        CGImageRef imageRef = CGImageCreate(width, height, 8, 32, 4*width, colorSpaceRef, bitmapInfo, providerRef, NULL, 0, kCGRenderingIntentDefault);
 	        
 	        UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
 	        
-	        return image;
+	        CGColorSpaceRelease(colorSpaceRef);
 	        
+	        return image;
 	    }
 	    
 	    return nil;
 	    
 	}
-	
+
 	static void releaseDataCallback(void *info, const void *data, size_t size) {
 		tgaFree((void *)data);
 	}
 ```
 For more details, please refer to the sample project.
-TODO: path
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAImageViewer_iOS
 
 ### 5. Free allocated memory (C language Only)
 
