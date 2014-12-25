@@ -5,7 +5,7 @@ TGAReader is the TGA(Targa) image reader for Java and C.
 
 ![alt text](http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=TGAReader.png "TGAReader")
 
-## LICENSE
+## License
 
 Released under the MIT license.
 
@@ -73,37 +73,241 @@ ABGR|TGAReader.ABGR|TGA_READER_ABGR|for OpenGL Texture(GL_RGBA), iOS UIImage
 
 ### 4. Use created pixels in your application.
 
-#### Java OpenGL Application
+#### 4.1. Java OpenGL Application
 Sample code to create Java OpenGL texture.
 
-#### Java Application
+**Java**
+```java
+	public int createTGATexture() {
+	    int texture = 0;
+	    
+	    try {
+	        FileInputStream fis = new FileInputStream(path);
+	        byte [] buffer = new byte[fis.available()];
+	        fis.read(buffer);
+	        fis.close();
+
+	        int [] pixels = TGAReader.read(buffer, TGAReader.ABGR);
+	        int width = TGAReader.getWidth(buffer);
+	        int height = TGAReader.getHeight(buffer);
+
+	        int [] textures = new int[1];
+	        gl.glGenTextures(1, textures, 0);
+
+	        gl.glEnable(GL.TEXTURE_2D);
+	        gl.glBindTexture(GL.TEXTURE_2D, textures[0]);
+	        gl.glPixelStorei(GL.UNPACK_ALIGNMENT, 4);
+
+	        IntBuffer texBuffer = IntBuffer.wrap(pixels);
+	        gl.glTexImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, texBuffer);
+
+	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.REPEAT);
+	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.REPEAT);
+	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
+	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
+	        
+	        texture = textures[0];
+	    }
+	    catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return texture;
+	}
+```
+
+#### 4.2. Java Application
 Sample code to create java.awt.image.BufferedImage.
 
-For more details, please look at the sample project.
+**Java**
+```java
+    private static JLabel createTGALabel(String path) throws IOException {
+
+        FileInputStream fis = new FileInputStream(path);
+        byte [] buffer = new byte[fis.available()];
+        fis.read(buffer);
+        fis.close();
+
+        int [] pixels = TGAReader.read(buffer, TGAReader.ARGB);
+        int width = TGAReader.getWidth(buffer);
+        int height = TGAReader.getHeight(buffer);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        image.setRGB(0, 0, width, height, pixels, 0, width);
+
+        ImageIcon icon = new ImageIcon(image.getScaledInstance(128, 128, BufferedImage.SCALE_SMOOTH));
+        return new JLabel(icon);
+    }
+```
+
+For more details, please refer to the sample project.
 TODO: path
 
-#### Android OpenGL Application
+#### 4.3. Android OpenGL Application
 Sample code to create Android OpenGL texture.
- 
-For more details, please look at the sample project.
+
+**Java**
+```java
+	import static javax.microedition.khronos.opengles.GL10;
+
+	public int createTGATexture(GL10 gl, String path) {
+	    int texture = 0;
+	    try {
+	        
+	        InputStream is = getContext().getAssets().open(path);
+	        byte [] buffer = new byte[is.available()];
+	        is.read(buffer);
+	        is.close();
+	        
+	        int [] pixels = TGAReader.read(buffer, TGAReader.ABGR);
+	        int width = TGAReader.getWidth(buffer);
+	        int height = TGAReader.getHeight(buffer);
+	        
+	        int [] textures = new int[1];
+	        gl.glGenTextures(1, textures, 0);
+	        
+	        gl.glEnable(GL_TEXTURE_2D);
+	        gl.glBindTexture(GL_TEXTURE_2D, textures[0]);
+	        gl.glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	        IntBuffer texBuffer = IntBuffer.wrap(pixels);
+	        gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBuffer);
+	        
+	        gl.glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	        gl.glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	        gl.glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	        gl.glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	        
+	        texture = textures[0];
+	        
+	    }
+	    catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return texture;
+	}
+```
+
+For more details, please refer to the sample project.
 TODO: path
 
-#### Android Application
+#### 4.4. Android Application
 Sample code to create android.graphics.Bitmap.
 
-For more details, please look at the sample project.
+**Java**
+```Java
+    private Bitmap createTGABitmap(String path) {
+        Bitmap bitmap = null;
+        try {
+            InputStream is = getAssets().open(path);
+            byte [] buffer = new byte[is.available()];
+            is.read(buffer);
+            is.close();
+            
+            int [] pixels = TGAReader.read(buffer, TGAReader.ARGB);
+            int width = TGAReader.getWidth(buffer);
+            int height = TGAReader.getHeight(buffer);
+            
+            bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Config.ARGB_8888);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+```
+For more details, please refer to the sample project.
 TODO: path
 
-#### iOS OpenGL Application
+#### 4.5. iOS OpenGL Application
 Sample code to create iOS OpenGL texture.
 
-For more details, please look at the sample project.
+**Objective-C**
+```objc
+	- (GLuint)createTGATexture:(NSString *)path {
+	    
+	    GLuint texture = 0;
+	    
+	    FILE *file = fopen([path UTF8String], "rb");
+	    if(file) {
+	        fseek(file, 0, SEEK_END);
+	        int size = ftell(file);
+	        fseek(file, 0, SEEK_SET);
+	        
+	        unsigned char *buffer = (unsigned char *)tgaMalloc(size);
+	        fread(buffer, 1, size, file);
+	        fclose(file);
+	        
+	        int width = tgaGetWidth(buffer);
+	        int height = tgaGetHeight(buffer);
+	        int *pixels = tgaRead(buffer, TGA_READER_ABGR);
+	        
+	        tgaFree(buffer);
+	        
+	        glGenTextures(1, &texture);
+	        glEnable(GL_TEXTURE_2D);
+	        glBindTexture(GL_TEXTURE_2D, texture);
+	        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	        
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	        
+	        tgaFree(pixels);
+	    }
+	    
+	    return texture;
+
+	}
+```
+
+For more details, please refer to the sample project.
 TODO: path
 
-#### iOS Application
+#### 4.6. iOS Application
 Sample code to create iOS UIImage.
 
-For more details, please look at the sample project.
+**Objective-C**
+```objc
+	- (UIImage *)createTGAImage:(NSString *)path {
+	    
+	    FILE *file = fopen([path UTF8String], "rb");
+	    if(file) {
+	        fseek(file, 0, SEEK_END);
+	        int size = ftell(file);
+	        fseek(file, 0, SEEK_SET);
+	        
+	        unsigned char *buffer = (unsigned char *)tgaMalloc(size);
+	        fread(buffer, 1, size, file);
+	        fclose(file);
+	        
+	        int width = tgaGetWidth(buffer);
+	        int height = tgaGetHeight(buffer);
+	        int *pixels = tgaRead(buffer, TGA_READER_ABGR);
+	        
+	        tgaFree(buffer);
+	        
+	        CGDataProviderRef providerRef = CGDataProviderCreateWithData(NULL, pixels, 4*width*height, releaseDataCallback);
+	        
+	        CGImageRef imageRef = CGImageCreate(width, height, 8, 32, 4*width, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaLast, providerRef, NULL, 0, kCGRenderingIntentDefault);
+	        
+	        UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
+	        
+	        return image;
+	        
+	    }
+	    
+	    return nil;
+	    
+	}
+	
+	static void releaseDataCallback(void *info, const void *data, size_t size) {
+		tgaFree((void *)data);
+	}
+```
+For more details, please refer to the sample project.
 TODO: path
 
 ### 5. Free allocated memory (C language Only)
