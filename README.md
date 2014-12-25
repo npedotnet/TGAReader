@@ -1,7 +1,7 @@
 TGAReader
 =========
 
-TGAReader is the TGA(Targa) image reader for Java and C.
+TGA(Targa) image reader for Java and C.
 
 ![alt text](http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=TGAReader.png "TGAReader")
 
@@ -21,7 +21,7 @@ https://github.com/npedotnet/TGAReader/blob/master/LICENSE
 **C**
 - Add tga_reader.c and tga_reader.h to your project.
 
-### 2. Create TGA binary data buffer.
+### 2. Create a TGA binary data buffer.
 
 **Java**
 ```java
