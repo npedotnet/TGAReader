@@ -94,17 +94,17 @@ Sample code to create Java OpenGL texture.
 	        int [] textures = new int[1];
 	        gl.glGenTextures(1, textures, 0);
 
-	        gl.glEnable(GL.TEXTURE_2D);
-	        gl.glBindTexture(GL.TEXTURE_2D, textures[0]);
-	        gl.glPixelStorei(GL.UNPACK_ALIGNMENT, 4);
+	        gl.glEnable(GL_TEXTURE_2D);
+	        gl.glBindTexture(GL_TEXTURE_2D, textures[0]);
+	        gl.glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	        IntBuffer texBuffer = IntBuffer.wrap(pixels);
-	        gl.glTexImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, texBuffer);
+	        gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBuffer);
 
-	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.REPEAT);
-	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.REPEAT);
-	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
-	        gl.glTexParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
+	        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	        
 	        texture = textures[0];
 	    }
