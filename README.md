@@ -5,11 +5,15 @@ TGA(Targa) image reader for Java and C.
 
 ![alt text](http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=TGAReader.png "TGAReader")
 
+Online TGA Canvas Demo page is http://npe-net.appspot.com/npesdk/gwt/tgaimagedemo/index.html
+
 ![alt text](http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=tgaimagedemo.png "TGAWebCanvas")
 
-Online Demo page is here!
+Online TGA WebGL Texture Demo page is http://npe-net.appspot.com/npesdk/gwt/tgawebgldemo/index.html
 
-http://npe-net.appspot.com/npesdk/gwt/tgaimagedemo/index.html
+<a href="http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=tgawebgldemo.png">
+<img width=50% height=50% src="http://3dtech.jp/wiki/index.php?plugin=attach&refer=TGAReader&openfile=tgawebgldemo.png">
+</a>
 
 ## License
 
@@ -403,6 +407,33 @@ private void addTGACanvas(String url) {
 For more details, please refer to the sample project.
 
 https://github.com/npedotnet/TGAReader/tree/master/samples/TGAWebViewer_GWT
+
+#### 4.8 GWT WebGL(GwtGL) Application
+
+Sample code to create TGA WebGL texture with GWT.
+
+```java
+import com.google.gwt.canvas.client.Canvas;
+import com.googlecode.gwtgl.binding.WebGLRenderingContext;
+import com.googlecode.gwtgl.binding.WebGLTexture;
+
+import static com.googlecode.gwtgl.binding.WebGLRenderingContext.*;
+
+WegGLRenderingContext gl = ...;
+
+// See 4.7. GWT Web Application
+Canvas canvas = createImageCanvas(pixels, width, height);
+
+WebGLTexture texture = gl.createTexture();
+
+gl.enable(TEXTURE_2D);
+gl.bindTexture(TEXTURE_2D, texture);
+gl.texImage2D(TEXTURE_2D, 0, RGBA, RGBA, UNSIGNED_BYTE, canvas.getElement());
+```
+
+For more details, please refer to the sample project.
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAWebGLViewer_GWT
 
 ### 5. Free allocated memory (C language Only)
 
