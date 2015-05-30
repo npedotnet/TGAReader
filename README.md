@@ -473,5 +473,65 @@ If you have your memory management system, please customize tgaMalloc() and tgaF
 - 16bit RGB Color image
 - X/Y origin offset of image
 
+## TGAWriter
+
+- RLE(Run Length Encoding) support
+- Only RGB Color Image support
+- Only UpperLeft Image origin support
+
+### Write a tga image from BufferedImage
+
+```java
+	String path = "images/Mandrill.bmp";
+	
+	try {
+		BufferedImage image = ImageIO.read(new File(path));
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int [] pixels = image.getRGB(0, 0, width, height, null, 0, width);
+		
+		byte [] buffer = TGAWriter.write(pixels, width, height, TGAReader.ARGB);
+		FileOutputStream fos = new FileOutputStream(path.replace(".bmp", ".tga"));
+		fos.write(buffer);
+		fos.close();
+	}
+	catch (IOException e) {
+		e.printStackTrace();
+	}
+```
+For more details, please see the sample project.
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAConverter_BufferedImage
+
+### Write a tga image from Android Bitmap
+
+```java
+	String inputPath = "images/Mandrill.bmp";
+	String outputPath = "Mandrill.tga";
+	
+	try {
+		InputStream is = getAssets().open(inputPath);
+		Bitmap bitmap = BitmapFactory.decodeStream(is);
+		is.close();
+		
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		int [] pixels = new int[width*height];
+		bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+		
+		byte [] buffer = TGAWriter.write(pixels, width, height, TGAReader.ARGB);
+		FileOutputStream fos = this.openFileOutput(outputPath, MODE_PRIVATE);
+		fos.write(buffer);
+		fos.close();
+	}
+	catch(Exception e) {
+		e.printStackTrace();
+	}
+
+```
+For more details, please see the sample project.
+
+https://github.com/npedotnet/TGAReader/tree/master/samples/TGAConverter_Android
+
 
 Thank you for reading through. Enjoy your programming life!
