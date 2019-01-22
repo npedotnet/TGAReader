@@ -30,8 +30,8 @@ typedef struct _TGA_ORDER {
 	int alphaShift;
 } TGA_ORDER;
 
-const TGA_ORDER *TGA_READER_ARGB;
-const TGA_ORDER *TGA_READER_ABGR;
+extern const TGA_ORDER *TGA_READER_ARGB;
+extern const TGA_ORDER *TGA_READER_ABGR;
 
 void *tgaMalloc(size_t size);
 void tgaFree(void *memory);
